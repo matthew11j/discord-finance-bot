@@ -70,22 +70,6 @@ def format_quote(obj):
     return rtn_str
 
 
-def format_company_overview(obj):
-    rtn_str = "{:<20} {:<15}".format('Symbol', obj['Symbol']) + "\n"
-    rtn_str += "{:<20} {:<15}".format('Name', obj['Name']) + "\n"
-    rtn_str += "{:<20} {:<15}".format('Sector', obj['Sector']) + "\n"
-    rtn_str += "{:<20} {:<15}".format('Description', obj['Description']) + "\n\n"
-    
-    rtn_str += "{:<20} {:<15}".format('52 Week High', obj['52WeekHigh']) + "\n"
-    rtn_str += "{:<20} {:<15}".format('52 Week Low', obj['52WeekLow']) + "\n"
-    rtn_str += "{:<20} {:<15}".format('50 Day Moving Average', obj['50DayMovingAverage']) + "\n"
-    rtn_str += "{:<20} {:<15}".format('200 Day Moving Average', obj['200DayMovingAverage']) + "\n\n"
-
-    rtn_str += "{:<20} {:<15}".format('Analyst Target Price', obj['AnalystTargetPrice']) + "\n"
-    
-    return rtn_str
-
-
 def graph(ticker_symbol):
     # Define url and driver
     url = 'https://www.stockscores.com/charts/charts/?ticker=' + ticker_symbol
@@ -118,6 +102,22 @@ def graph(ticker_symbol):
     im = Image.open('shot.png')
     im = im.crop((100, 250, int(width), int(height)))
     im.save('shot.png')
+
+
+def format_company_overview(obj):
+    rtn_str = "{:<20} {:<15}".format('Symbol', obj['Symbol']) + "\n"
+    rtn_str += "{:<20} {:<15}".format('Name', obj['Name']) + "\n"
+    rtn_str += "{:<20} {:<15}".format('Sector', obj['Sector']) + "\n"
+    rtn_str += "{:<20} {:<15}".format('Description', obj['Description']) + "\n\n"
+    
+    rtn_str += "{:<20} {:<15}".format('52 Week High', obj['52WeekHigh']) + "\n"
+    rtn_str += "{:<20} {:<15}".format('52 Week Low', obj['52WeekLow']) + "\n"
+    rtn_str += "{:<20} {:<15}".format('50 Day Moving Average', obj['50DayMovingAverage']) + "\n"
+    rtn_str += "{:<20} {:<15}".format('200 Day Moving Average', obj['200DayMovingAverage']) + "\n\n"
+
+    rtn_str += "{:<20} {:<15}".format('Analyst Target Price', obj['AnalystTargetPrice']) + "\n"
+    
+    return rtn_str
 
 
 def format_help():

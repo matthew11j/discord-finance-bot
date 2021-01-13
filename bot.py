@@ -38,7 +38,8 @@ async def on_message(message):
             await message.channel.send(file=discord.File('shot.png'))
         else:
             if rtn_message:
-                if len(rtn_message) >= 2000:
+                # TODO clean up
+                if len(rtn_message) >= 2000: # For company_overview
                     split_strings = rtn_message.split("52WeekHigh")
                     second_half = split_strings[1]
                     split_strings[1] = '52WeekHigh' + second_half
