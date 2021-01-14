@@ -13,25 +13,31 @@ from time import sleep
 
 def handle_message(message):
     message_args = message.content.split()
-    command = message_args[0]
-    if (len(message_args) > 1) :
-        ticker_symbol = message_args[1]
+    arg1 = message_args[0]
+    if len(message_args) > 2:
+        arg2 = message_args[1]
+        arg3 = message_args[2]
+    elif len(message_args) > 1 and len(message_args) < 3 :
+        arg2 = message_args[1]
+        arg3 = '1'
     else:
-        ticker_symbol = ""
+        arg2 = ''
+        arg3 = '1'
     
     # testing
-    # command = '$overview'
-    # ticker_symbol = 'tnxp'
-    if command == '$daily':
-        return format_daily(finance_api.get_daily(ticker_symbol))
-    elif command == '$quote':
-        return format_quote(finance_api.get_quote_endpoint(ticker_symbol))
-    elif command == '$graph':
-        graph(ticker_symbol)
+    # arg1 = '$graph'
+    # arg2 = 'tnxp'
+    # arg3 = '30'
+    if arg1 == '$daily':
+        return format_daily(finance_api.get_daily(arg2))
+    elif arg1 == '$quote':
+        return format_quote(finance_api.get_quote_endpoint(arg2))
+    elif arg1 == '$graph':
+        graph(arg2, arg3)
         return 'post_graph'
-    elif command == '$overview':
-        return format_company_overview(finance_api.get_company_overview(ticker_symbol))
-    elif command == '$help':
+    elif arg1 == '$overview':
+        return format_company_overview(finance_api.get_company_overview(arg2))
+    elif arg1 == '$help':
         return format_help()
     else: 
         return None
@@ -70,7 +76,28 @@ def format_quote(obj):
     return rtn_str
 
 
-def graph(ticker_symbol):
+def graph(ticker_symbol, interval):
+    if interval == '1':
+        time_key = '1d'
+    elif interval == '2':
+        time_key = '2d'
+    elif interval == '5':
+        time_key = '5d'
+    elif interval == '10':
+        time_key = '10d'
+    elif interval == '15':
+        time_key = '15d'
+    elif interval == '30':
+        time_key = '1m'
+    elif interval == '90':
+        time_key = '3d'
+    elif interval == '180':
+        time_key = '6m'
+    elif interval == '365':
+        time_key = '1y'
+    elif interval == '720':
+        time_key = '2y'
+    
     # Define url and driver
     url = 'https://www.stockscores.com/charts/charts/?ticker=' + ticker_symbol
     op = webdriver.ChromeOptions()
@@ -81,8 +108,12 @@ def graph(ticker_symbol):
     # Go to url, scroll down to right point on page and find correct element
     driver.get(url)
     sleep(1) #  Wait for page to load
-    list_el = driver.find_element_by_class_name('timechoice').find_element_by_tag_name('li')
-    list_el.click()
+    list_el = driver.find_element_by_class_name('timechoice')
+    all_options = list_el.find_elements_by_tag_name('li')
+    for option in all_options:
+        if option.text == time_key:
+            option.click()
+
     sleep(0.5) # Wait for graph to update
     element = driver.find_element_by_class_name('col_full')
     driver.save_screenshot("shot.png")
@@ -122,9 +153,9 @@ def format_company_overview(obj):
 
 def format_help():
     rtn_str = "Commands: (arguments must be separated by spaces)\n\n"
-    rtn_str += "$daily (1 arg)\n"
-    rtn_str += "$quote (1 arg)\n"
-    rtn_str += "$graph (1 arg)\n"
+    rtn_str += "$daily (1 arg, ticker)\n"
+    rtn_str += "$quote (1 arg, ticker)\n"
+    rtn_str += "$graph (2 args, ticker, interval(days) [1, 2, 5, 10, 15, 30, 90, 180, 365, 720], default interval is 1d)\n"
 
     return rtn_str
 

@@ -1,6 +1,7 @@
 from alpha_vantage.timeseries import TimeSeries
 from alpha_vantage.fundamentaldata import FundamentalData
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 finance_key = os.getenv('FINANCE_API_KEY')
